@@ -22,7 +22,7 @@ if ! grep -q 'cd /vagrant/www/public' "/home/vagrant/.profile"
 fi
 
 echo "Installing LAMP..."
-echo "LAMP (1/4)..."
+echo "LAMP (1/5)..."
 if ! isinstalled php5
 	then
 		add-apt-repository -y ppa:ondrej/php5-5.6 > /dev/null 2>&1
@@ -32,7 +32,7 @@ if ! isinstalled php5
 		echo "ServerName dev.io:80" >> /etc/apache2/apache2.conf
 fi
 
-echo "LAMP (2/4)..."
+echo "LAMP (2/5)..."
 if ! isinstalled mysql-server
 	then
 		debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
@@ -41,17 +41,23 @@ if ! isinstalled mysql-server
 		sed -i -e 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/my.cnf
 fi
 
-echo "LAMP (3/4)..."
+echo "LAMP (3/5)..."
 if ! isinstalled php5-mysql
 	then
 		apt-get install -y php5-mysql php5-gd > /dev/null 2>&1
 fi
 
-echo "LAMP (4/4)..."
+echo "LAMP (4/5)..."
 if ! isinstalled libapache2-mod-suphp
 	then
 		apt-get -y install libapache2-mod-suphp > /dev/null 2>&1
 		sed -i -e 's/docroot=\/var/docroot=\/vagrant\:\/var/g' /etc/suphp/suphp.conf
+fi
+
+echo "LAMP (5/5)..."
+if ! isinstalled php5-curl
+	then
+		apt-get install php5-curl > /dev/null 2>&1
 fi
 
 echo "Installing our site..."
