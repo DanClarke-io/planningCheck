@@ -1,0 +1,6 @@
+.vagrant
+downloads
+.DS_Store
+data/database_*
+data/database.mysql.info
+data/database.mysql_*
