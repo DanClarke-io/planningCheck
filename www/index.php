@@ -34,10 +34,16 @@
             foreach($plans as $plan) {
                $cells = explode('<td',$plan);
                $x = 0;
+               $thisCell = array();
                foreach($cells as $cell) {
                   $cell = trim(strip_tags('<td'.$cell));
-                  if($x==1) { $addresses[] = $cell; $x = 0;}
+                  if($x==1) { $thisCell['address'] = $cell; $x = 0; }
                   if($cell=='Site Address:') { $x = 1; }
+               }
+               foreach($cells as $cell) {
+                  $cell = trim(strip_tags('<td'.$cell));
+                  if($x==1) { $thisCell['url'] = $cell; $x = 0; }
+                  if($cell=='App. No.:') { $x = 1; }
                }
             }
             curl_close($ch);
@@ -51,10 +57,10 @@
          $addresses = array_merge($addresses,getAddresses('http://www.wyreforest.gov.uk/fastweb/weeklylistdec.asp','0'));
          $addresses = array_merge($addresses,getAddresses('http://www.wyreforest.gov.uk/fastweb/weeklylistdec.asp','-1'));
          $addresses = array_merge($addresses,getAddresses('http://www.wyreforest.gov.uk/fastweb/weeklylistdec.asp','-2'));
-         foreach($addresses as $address) { if(stripos($address, 'cookley')!==false) { $found[] = $address; }}
+         foreach($addresses as $address) { if(stripos($address['address'], 'cookley')!==false) { $found[] = $address; }}
          echo '<p>We found '.count($addresses).' planning applications/decisions, '.count($found).' contained "Cookley".</p>';
          if(count($found)>0) {
-            foreach($found as $item) { echo '<p>'.$item.'</p>'; }
+            foreach($found as $item) { echo '<p>'.$item['address'].' - <a href="http://www.wyreforest.gov.uk/fastweb/detail.asp?AltRef='.$item['url'].'">'.$item['url'].'</a></p>'; }
          }
       ?>
    </body>
