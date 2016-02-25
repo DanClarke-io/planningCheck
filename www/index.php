@@ -45,6 +45,7 @@
                   if($x==1) { $thisCell['url'] = $cell; $x = 0; }
                   if($cell=='App. No.:') { $x = 1; }
                }
+               $addresses[] = $thisCell;
             }
             curl_close($ch);
             return $addresses;
